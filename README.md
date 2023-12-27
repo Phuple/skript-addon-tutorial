@@ -1,11 +1,12 @@
 # How to Make a Skript Addon
-This tutorial assumes you know the basics of Java and already know how to make a JavaPlugin.
-Note: I just made this, so I don't have much included yet, only basic basic stuff.
+
+## Preface:
+This tutorial assumes you are knowledgable in java, and already know to to setup a minecraft plugin.
 
 ## Setting up the addon
 
 ### Maven
-You will need to add this repository:
+You will need to add the SkriptLang api to your maven file via the Skript Repository  
 ```xml
 <repository>
     <id>skript-releases</id>
@@ -13,7 +14,7 @@ You will need to add this repository:
     <url>https://repo.skriptlang.org/releases</url>
 </repository>
 ```
-And then this dependency:
+dependency:
 ```xml
 <dependency>
     <groupId>com.github.SkriptLang</groupId>
@@ -38,19 +39,20 @@ try {
 ## Creating syntax
 
 ### Effects
-To make an effect (an effect is something like "ban player") you will first need to create a file
-It's good practice to sort and organize your code, so you should probably make an "effects" package.
+An effect is simply; a piece of code that does not have a return value.
+`send "hello" to player` is considered an effect.
 
-Now, with a file named e.g. EffExampleEffect we can begin coding the effect
-
-Before you start with `public class`, you can define some information for the effect such as:
+First we will create a new `effects` package, and create a new class `EffEffectExample.class` under said package. 
+You can provide Skript with extra information about your syntax using the `@Name` and `@Description` annotations, these will be used in documentation.
 ```java
 @Name("Example")
 @Description({"Example effect"})
 ```
 
-You need to make your class extend ch.njol.skript.lang.Effect
+Now our class will extend ch.njol.skript.lang.Effect
 ```java
+package me.myself.skriptaddon.effects
+
 public class EffExampleEffect extends Effect {
 ...
 }
@@ -60,14 +62,15 @@ Inside of the class:
 ```java
 // register the effect & syntax
 static {
-        Skript.registerEffect(EffExampleEffect.class, // change this to your file name.class
-                "example effect" // this is syntax. it's formatted practically the same way was something like SkriptHub or any docs
-        );
+    Skript.registerEffect(EffExampleEffect.class, // change this to your file name.class
+        "example effect" // This is the syntax, this will be used in your .sk file; when writing a script.
+    );
 }
 
 // initiate effect
 @Override
 public boolean init(Expression<?>[] expr, int i, Kleenean kleenean, SkriptParser.ParseResult parseResult) {
+    // returns true if we want Skript to register our effect.
     return true;
 }
 
@@ -77,10 +80,10 @@ public String toString(Event event, boolean b) {
     return "example effect";
 }
 
-// Now, the main part. execution
+// Main execution
 @Override
 protected void execute(Event event) {
-    // you can run any code here now!
+    // Skript will call this method and execute the code in this method.
     Bukkit.getLogger().info("Test");
 }
 ```
